@@ -3,6 +3,9 @@ package com.codewithshuaib.blog.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="users")
 @Data
@@ -15,4 +18,6 @@ public class User {
     private String email;
     private String password;
     private String about;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Post> posts=new ArrayList<>();
 }
