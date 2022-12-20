@@ -3,7 +3,7 @@ package com.codewithshuaib.blog.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -24,4 +24,7 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private List<Comment> comments=new ArrayList<>();
+
 }

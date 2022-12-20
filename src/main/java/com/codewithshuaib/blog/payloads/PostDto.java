@@ -1,14 +1,12 @@
 package com.codewithshuaib.blog.payloads;
 
-import com.codewithshuaib.blog.entities.Category;
-import com.codewithshuaib.blog.entities.User;
 import lombok.Data;
 
-import java.util.Date;
+import java.util.*;
 
 @Data
 public class PostDto {
-
+    private String postId;
     private String postTitle;
     private String imageName;
     private String content;
@@ -16,5 +14,7 @@ public class PostDto {
 
     private CategoryDto category;
     private UserDto user;
+
+    private List<CommentDto> comments=new ArrayList<>();
 
 }
