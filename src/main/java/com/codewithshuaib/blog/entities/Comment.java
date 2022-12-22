@@ -1,15 +1,17 @@
 package com.codewithshuaib.blog.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
+@Entity @NoArgsConstructor @AllArgsConstructor
 @Data
 @Table(name="comments")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String commentId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long commentId;
     private String content;
 
     @ManyToOne()

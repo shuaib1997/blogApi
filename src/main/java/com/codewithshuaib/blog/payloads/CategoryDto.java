@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class CategoryDto {
-    private String categoryId;
+    private Long categoryId;
     @NotEmpty
     @Size(min = 4,message = "Min size of category title is 4")
     private String categoryTitle;

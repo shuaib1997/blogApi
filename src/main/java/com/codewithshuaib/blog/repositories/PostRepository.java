@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post,String> {
+public interface PostRepository extends JpaRepository<Post,Long> {
 
     Page<Post> findByUser(User user, Pageable pageable);
     Page<Post> findByCategory(Category category,Pageable pageable);

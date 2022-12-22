@@ -8,6 +8,7 @@ import com.codewithshuaib.blog.services.FileService;
 import com.codewithshuaib.blog.services.PostService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -21,22 +22,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-@RestController
+@RestController @RequiredArgsConstructor
 @RequestMapping("/api/")
 public class PostController {
-    @Autowired
-    private PostService postService;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private FileService fileService;
+    private final PostService postService;
+    private final CategoryRepository categoryRepository;
+    private final FileService fileService;
     @Value("${project.image}")
     private String path;
 
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto,
-                                              @PathVariable String userId,
-                                              @PathVariable String categoryId){
+                                              @PathVariable Long userId,
+                                              @PathVariable Long categoryId){
 
         PostDto cratedPostDto=this.postService.createPost(postDto,userId,categoryId);
         return new ResponseEntity<PostDto>(cratedPostDto, HttpStatus.CREATED);
@@ -44,7 +42,7 @@ public class PostController {
 
 
     @GetMapping("/user/{userId}/posts")
-    public ResponseEntity<PostResponse> getPostByUser( @PathVariable String userId,
+    public ResponseEntity<PostResponse> getPostByUser( @PathVariable Long userId,
                                                         @RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false)Integer pageNumber,
                                                         @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false)Integer pageSize){
         PostResponse postResponse=this.postService.getPostByUser(userId,pageNumber,pageSize);
@@ -52,7 +50,7 @@ public class PostController {
     }
 
     @GetMapping("/category/{categoryId}/posts")
-    public ResponseEntity<PostResponse> getPostByCategory( @PathVariable String categoryId,
+    public ResponseEntity<PostResponse> getPostByCategory( @PathVariable Long categoryId,
                                                             @RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false)Integer pageNumber,
                                                             @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false)Integer pageSize){
         PostResponse postResponse=this.postService.getPostByCategory(categoryId,pageNumber,pageSize);
@@ -71,19 +69,19 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable String postId){
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId){
         PostDto postDto=this.postService.getPostById(postId);
         return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable String postId){
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Long postId){
         PostDto updatedDto=this.postService.updatePost(postDto, postId);
         return new ResponseEntity<PostDto>(updatedDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable String postId){
+    public ResponseEntity<String> deletePost(@PathVariable Long postId){
         this.postService.deletePost(postId);
         return new ResponseEntity<String>("Deleted successfully!", HttpStatus.OK);
     }
@@ -95,7 +93,7 @@ public class PostController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
     @PostMapping("/post/image/upload/{postId}")
-    public ResponseEntity<PostDto> uploadPostImage(@PathVariable String postId,
+    public ResponseEntity<PostDto> uploadPostImage(@PathVariable Long postId,
                                                          @RequestParam("image")MultipartFile image) throws IOException {
         PostDto postDto=this.postService.getPostById(postId);
         String fileName= this.fileService.uploadImage(path,image);

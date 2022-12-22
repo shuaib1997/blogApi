@@ -6,7 +6,7 @@ import java.util.*;
 
 @Data
 public class PostDto {
-    private String postId;
+    private Long postId;
     private String postTitle;
     private String imageName;
     private String content;

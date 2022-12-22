@@ -1,17 +1,19 @@
 package com.codewithshuaib.blog.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 
-@Entity
+@Entity @NoArgsConstructor @AllArgsConstructor
 @Table(name = "posts")
 @Data
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String postId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long postId;
     @Column(name = "post_title",length = 100,nullable = false)
     private String postTitle;
     private String imageName;

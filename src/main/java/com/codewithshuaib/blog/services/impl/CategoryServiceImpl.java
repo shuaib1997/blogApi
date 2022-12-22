@@ -5,19 +5,19 @@ import com.codewithshuaib.blog.exceptions.ResourceNotFoundException;
 import com.codewithshuaib.blog.payloads.CategoryDto;
 import com.codewithshuaib.blog.repositories.CategoryRepository;
 import com.codewithshuaib.blog.services.CategoryService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-@Service
+@Service @RequiredArgsConstructor @Transactional @Slf4j
 public class CategoryServiceImpl implements CategoryService {
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
@@ -27,8 +27,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
-        Category category=this.categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category","Category id",categoryId));
+    public CategoryDto updateCategory(CategoryDto categoryDto, Long categoryId) {
+        Category category=this.categoryRepository.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category","Category id",categoryId+""));
         category.setCategoryTitle(categoryDto.getCategoryTitle());
         category.setCategoryDescription(categoryDto.getCategoryDescription());
         Category updatedCategory=this.categoryRepository.save(category);
@@ -36,14 +36,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getSingleCategory(String categoryId) {
-        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id",categoryId));
+    public CategoryDto getSingleCategory(Long categoryId) {
+        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id",categoryId+""));
         return this.modelMapper.map(category,CategoryDto.class);
     }
 
     @Override
-    public void deleteCategory(String categoryId) {
-        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id",categoryId));
+    public void deleteCategory(Long categoryId) {
+        Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id",categoryId+""));
         this.categoryRepository.delete(category);
     }
 
